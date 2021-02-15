@@ -1,17 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Webcam from "react-webcam";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const WebcamComponent = () => <Webcam />;
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+//ReactDOM.render(<App />, document.getElementById('root'));
+document.getElementsByTagName("h1")[0].style.fontSize = "6vw";
+
+const WebcamCapture = () => {
+  const webcamRef = React.useRef(null);
+  const [imgSrc, setImgSrc] = React.useState(null);
+
+  const capture = React.useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImgSrc(imageSrc);
+  }, [webcamRef, setImgSrc]);
+
+  return (
+    <>
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+      />
+      <button onClick={capture}>📷</button>
+      {imgSrc && (
+        <img
+          src={imgSrc}
+        />
+      )}
+    </>
+  );
+};
+
+ReactDOM.render(<WebcamCapture />, document.getElementById("root"));
